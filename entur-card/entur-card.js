@@ -95,7 +95,7 @@ class  EnTurCard extends HTMLElement {
       const delay = state.attributes['delay'];
       const icon = entityId.icon;
       const name = entityId.name;
-      const destination = entityId.destination;
+      const destination = entityId.destination ? entityId.destination : 'unavailable';
       const time = moment(state.attributes['due_at']).format('H:mm');
       const human = moment(state.attributes['due_at']).fromNow();
 
@@ -116,7 +116,9 @@ class  EnTurCard extends HTMLElement {
               <ha-icon class="ha-icon entity" icon="mdi:${icon}"></ha-icon>
               <span class="line">${line}</span>
             </div>
-
+        `
+      if (destination != 'unavailable'){
+        enturHtml += `
             <div class="entur-separator">
               <ha-icon class="ha-icon separator" icon="mdi:dots-horizontal"></ha-icon>
               <ha-icon class="ha-icon right" icon="mdi:chevron-right"></ha-icon>
@@ -125,7 +127,9 @@ class  EnTurCard extends HTMLElement {
             <div class="entur-title">
               <span class="destination">${destination}</span>
             </div>
-
+        `
+      }
+      enturHtml += `
             <div class="entur-glance">
               <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
               <span class="time">${time}</span>
