@@ -94,7 +94,7 @@ class  EnTurCard extends HTMLElement {
       const line = state.attributes['route'];
       const delay = state.attributes['delay'];
       const icon = entityId.icon ? entityId.icon : state.attributes['icon'];
-      const name = entityId.name;
+      const name = entityId.name ? entityId.name : state.attributes['friendly_name'];
       const destination = entityId.destination ? entityId.destination : 'unavailable';
       const time = moment(state.attributes['due_at']).format('H:mm');
       const human = moment(state.attributes['due_at']).fromNow();
