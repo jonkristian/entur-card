@@ -55,7 +55,7 @@ If you define entities as objects instead of strings, you can add more customiza
 
 #### Configure the new card inside `ui-lovelace.yaml`
 
-Example configuration for this card.
+## Example configuration for this card.
 ```yaml
 - type: custom:entur-card
   title: Busstider
