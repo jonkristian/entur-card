@@ -180,19 +180,19 @@ class  EnTurCard extends HTMLElement {
       enturHtml += `
             </div>
           </div>
-
+        `
+      enturHtml += `
           <div class="entur-content">
-            <div class="entur-line">
+            <div class="entur-title">
               <span class="line">${line}</span>
             </div>
-            
             <div class="entur-delay-${delay_status}">
               <span class="${delay_status}">
                 <ha-icon class="ha-icon traffic" icon="mdi:bus-clock"></ha-icon>
                 <span class="delay">${delay} min.</span>
               </span>
             </div>
-
+            
             <div class="entur-glance">
               <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
               <span class="time">${time}</span>
