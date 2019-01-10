@@ -1,7 +1,7 @@
 # Entur Card
 This card is made to work with the [Entur public transport](https://www.home-assistant.io/components/sensor.entur_public_transport/) component. You will have to configure this component before you can use this card.
 
-[![Skjermbilde-2019-01-09-kl-22-28-14.png](https://i.postimg.cc/rp9zsTq0/Skjermbilde-2019-01-09-kl-22-28-14.png)](https://postimg.cc/4KmX2r7s)
+[![entur.png](https://i.postimg.cc/59B53jfv/entur.png)](https://postimg.cc/F1KJFrds)
 
 >⚠️ Unfortunately there is currently no provided method to define a start and a stop station with entur. But you can add a whitelist of *lines* so that you can force only relevant results. For now this card let's you define a destination, only added for visual reasons. Hopefully in the future we can define from / to, by then the destination option will be removed.
 
