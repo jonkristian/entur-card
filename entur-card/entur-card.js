@@ -4,6 +4,7 @@ class  EnTurCard extends HTMLElement {
     const entities = this.config.entities;
     const title    = this.config.title;
     const icon     = this.config.icon;
+    const showhuman = this.config.human;
 
     if (!this.content) {
       const card = document.createElement('ha-card')
@@ -15,7 +16,6 @@ class  EnTurCard extends HTMLElement {
       style.textContent = `
         .entur {
           padding: 0 16px 16px;
-          font-weight: 300;
         }
 
         .entur-glance {
@@ -28,38 +28,59 @@ class  EnTurCard extends HTMLElement {
         }
 
         .entur-item {
-          margin-bottom: 1em;
-          padding-bottom: 1em;
+          padding-bottom: 0.5em;
+          padding-left: 10px;
         }
 
         .entur-header {
-          font-size: 1.4em;
-          border-bottom: 1px solid #eeeeee;
-          padding-bottom: 0.5em;
-          margin-bottom: 0.5em;
+        }
+        
+        .entur-header .ha-icon {
+          height: 23px;
+          width: 23px;
+          margin-right: 8px;
+          margin-bottom: 5px
         }
 
+        .entur-title {
+          flex: 1;
+        }
+        .station {
+        }
         .entur-content {
-          font-size: 1.2em;
           display: flex;
           align-items: center;
           justify-content: space-between;
+          margin-top: 0.2em;
+          padding-left: 48px;
         }
-
-        .entur-separator {
-          color: #999999;
+        .entur-content .entur-line {
+          font-family: var(--paper-font-body1_-_font-family);
+          -webkit-font-smoothing: var(--paper-font-body1_-_-webkit-font-smoothing);
+          font-size: var(--paper-font-body1_-_font-size);
+          font-weight: var(--paper-font-body1_-_font-weight);
+          letter-spacing: var(--paper-font-body1_-_letter-spacing);
+          line-height: var(--paper-font-body1_-_line-height);
+          
         }
-
-        .entur-footer {
-          display: flex;
-          justify-content: space-between;
+        .entur-delay-delayed{
+          font-family: var(--paper-font-body1_-_font-family);
+          -webkit-font-smoothing: var(--paper-font-body1_-_-webkit-font-smoothing);
+          font-weight: var(--paper-font-body1_-_font-weight);
+          letter-spacing: var(--paper-font-body1_-_letter-spacing);
+          line-height: var(--paper-font-body1_-_line-height);
+          font-size: 0.8em;
           font-style: italic;
-          margin-top: 0.8em;
-          color: #999999;
+          display: flex;
+          align-items: right;
+          text-align: right;
+          justify-content: flex-end;
         }
-
+        .entur-delay-ontime{
+          display: none;
+        }
         .entur .ontime {
-          color: #dddddd;
+          color: hsla(214, 90%, 52%, 0.8);
         }
 
         .entur .delayed {
@@ -70,12 +91,49 @@ class  EnTurCard extends HTMLElement {
           height: 16px;
           width: 16px;
         }
-
-        .entur .time,
-        .entur .destination,
-        .entur .delay,
-        .entur .line {
-          vertical-align: middle;
+        .entur-station .ha-icon {
+          flex: 0 0 40;
+          color: var(--paper-item-icon-color, #44739e);
+        }
+        .entur-glance .ha-icon{
+          color: var(--primary-color);
+        }
+        .entur-glance .time{
+          color: var(--primary-color);
+          font-family: var(--paper-font-body1_-_font-family);
+          -webkit-font-smoothing: var(--paper-font-body1_-_-webkit-font-smoothing);
+          font-size: var(--paper-font-body1_-_font-size);
+          font-weight: var(--paper-font-body1_-_font-weight);
+          letter-spacing: var(--paper-font-body1_-_letter-spacing);
+          line-height: var(--paper-font-body1_-_line-height);
+        }
+        .entur-station .station {
+          font-family: var(--paper-font-body1_-_font-family);
+          -webkit-font-smoothing: var(--paper-font-body1_-_-webkit-font-smoothing);
+          font-size: var(--paper-font-body1_-_font-size);
+          font-weight: var(--paper-font-body1_-_font-weight);
+          letter-spacing: var(--paper-font-body1_-_letter-spacing);
+          line-height: var(--paper-font-body1_-_line-height);
+          line-height: 40px;
+          color: var(--primary-text-color);  
+          margin-left: 15px;
+        }
+        .entur-footer {
+          padding-left: 48px;
+          display: flex;
+          justify-content: space-between;
+          font-style: italic;
+        }
+        .entur-footer .entur-footer-text{
+          color: var(--secondary-color);
+          font-family: var(--paper-font-body1_-_font-family);
+          -webkit-font-smoothing: var(--paper-font-body1_-_-webkit-font-smoothing);
+          font-size: 0.8em;
+          font-weight: var(--paper-font-body1_-_font-weight);
+          letter-spacing: var(--paper-font-body1_-_letter-spacing);
+          line-height: var(--paper-font-body1_-_line-height);
+          text-align: right;
+          font-style: italic;
         }
         `
       card.appendChild(style)
@@ -91,64 +149,97 @@ class  EnTurCard extends HTMLElement {
 
       const state = hass.states[entityId.entity];
 
+      const name = entityId.name ? entityId.name : state.attributes['friendly_name'].match(/entur (.+?)(?= platform|$)/i)[1];
+      const icon = entityId.icon ? entityId.icon : state.attributes['icon']; 
+      const destination = entityId.destination ? entityId.destination : 'unavailable';
+      
       const line = state.attributes['route'];
       const delay = state.attributes['delay'];
-      const icon = entityId.icon ? entityId.icon : state.attributes['icon'];
-      const name = entityId.name ? entityId.name : state.attributes['friendly_name'].match(/entur (.+?)(?= platform|$)/i)[1];
-      const destination = entityId.destination ? entityId.destination : 'unavailable';
-      const time = moment(state.attributes['due_at']).format('H:mm');
+      const time = moment(state.attributes['due_at']).format('HH:mm');
       const human = moment(state.attributes['due_at']).fromNow();
+      const delay_status = delay > 0 ? 'delayed':'ontime';
 
-      let delay_status = 'ontime';
-      if ( delay > 0 ) {
-        delay_status = 'delayed';
-      }
+      const next_line = state.attributes['next_route'];
+      const next_delay = state.attributes['next_delay'];
+      const next_time = moment(state.attributes['next_due_at']).format('HH:mm');
+      const next_human = moment(state.attributes['next_due_at']).fromNow();
+      const next_delay_status = next_delay > 0 ? 'delayed':'ontime';
 
       enturHtml += `
         <div class="entur-item">
-
           <div class="entur-header">
-            <span class="station">${name}</span>
-          </div>
-
-          <div class="entur-content">
-            <div class="entur-title">
+            <div class="entur-station">
               <ha-icon class="ha-icon entity" icon="mdi:${icon}"></ha-icon>
-              <span class="line">${line}</span>
-            </div>
-        `
+              <span class="station">${name}</span>
+                  `
       if (destination != 'unavailable'){
         enturHtml += `
-            <div class="entur-separator">
-              <ha-icon class="ha-icon separator" icon="mdi:dots-horizontal"></ha-icon>
-              <ha-icon class="ha-icon right" icon="mdi:chevron-right"></ha-icon>
-            </div>
-
-            <div class="entur-title">
-              <span class="destination">${destination}</span>
-            </div>
+              <span class="station"> -> ${destination}</span>
         `
       }
       enturHtml += `
+            </div>
+          </div>
+        `
+      enturHtml += `
+          <div class="entur-content">
+            <div class="entur-title">
+              <span class="line">${line}</span>
+            </div>
+            <div class="entur-delay-${delay_status}">
+              <span class="${delay_status}">
+                <ha-icon class="ha-icon traffic" icon="mdi:bus-clock"></ha-icon>
+                <span class="delay">${delay} min.</span>
+              </span>
+            </div>
+            
             <div class="entur-glance">
               <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
               <span class="time">${time}</span>
             </div>
           </div>
-
+                  `
+      if (showhuman != false){
+        enturHtml += `
           <div class="entur-footer">
-            <span class="time">Arriving ${human}</span>
-            <span class="traffic">
-              <span class="${delay_status}">
-                <ha-icon class="ha-icon traffic" icon="mdi:bus-clock"></ha-icon>
-                <span class="delay">${delay} min.</span>
-              </span>
+            <span class="entur-footer-text">
+              Arrives ${human}
             </span>
           </div>
+        `
+      }
+      enturHtml += `
+          <div class="entur-content">
+            <div class="entur-title">
+              <span class="line">${next_line}</span>
+            </div>
+            <div class="entur-delay-${next_delay_status}">
+              <span class="${next_delay_status}">
+                <ha-icon class="ha-icon traffic" icon="mdi:bus-clock"></ha-icon>
+                <span class="delay">${next_delay} min.</span>
+              </span>
+            </div>
+            
+            <div class="entur-glance">
+              <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
+              <span class="time">${next_time}</span>
+            </div>
+          </div>
+                  `
+      if (showhuman != false){
+        enturHtml += `
+          <div class="entur-footer">
+            <span class="entur-footer-text">
+              Arrives ${next_human}
+            </span>
+          </div>
+        `
+      }
+      enturHtml += `
         </div>
+        
       `
     })
-
     enturHtml += `
     </div>
     `
