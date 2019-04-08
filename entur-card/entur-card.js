@@ -34,7 +34,7 @@ class  EnTurCard extends HTMLElement {
 
         .entur-header {
         }
-        
+
         .entur-header .ha-icon {
           height: 23px;
           width: 23px;
@@ -61,7 +61,7 @@ class  EnTurCard extends HTMLElement {
           font-weight: var(--paper-font-body1_-_font-weight);
           letter-spacing: var(--paper-font-body1_-_letter-spacing);
           line-height: var(--paper-font-body1_-_line-height);
-          
+
         }
         .entur-delay-delayed{
           font-family: var(--paper-font-body1_-_font-family);
@@ -115,7 +115,7 @@ class  EnTurCard extends HTMLElement {
           letter-spacing: var(--paper-font-body1_-_letter-spacing);
           line-height: var(--paper-font-body1_-_line-height);
           line-height: 40px;
-          color: var(--primary-text-color);  
+          color: var(--primary-text-color);
           margin-left: 15px;
         }
         .entur-footer {
@@ -150,19 +150,21 @@ class  EnTurCard extends HTMLElement {
       const state = hass.states[entityId.entity];
 
       const name = entityId.name ? entityId.name : state.attributes['friendly_name'].match(/entur (.+?)(?= platform|$)/i)[1];
-      const icon = entityId.icon ? entityId.icon : state.attributes['icon']; 
+      const icon = entityId.icon ? entityId.icon : state.attributes['icon'];
       const destination = entityId.destination ? entityId.destination : 'unavailable';
-      
+
       const line = state.attributes['route'];
       const delay = state.attributes['delay'];
-      const time = moment(state.attributes['due_at']).format('HH:mm');
-      const human = moment(state.attributes['due_at']).fromNow();
-      const delay_status = delay > 0 ? 'delayed':'ontime';
+			const time = state.attributes['due_at'];
+			const human = moment(state.attributes['due_at'], "HH:mm").fromNow();
+
+      const delay_status = delay > 0 ? 'delayed' : 'ontime';
 
       const next_line = state.attributes['next_route'];
       const next_delay = state.attributes['next_delay'];
-      const next_time = moment(state.attributes['next_due_at']).format('HH:mm');
-      const next_human = moment(state.attributes['next_due_at']).fromNow();
+			const next_time = state.attributes['next_due_at'];
+			const next_human = moment(state.attributes['next_due_at'], "HH:mm").fromNow();
+
       const next_delay_status = next_delay > 0 ? 'delayed':'ontime';
 
       enturHtml += `
@@ -192,7 +194,7 @@ class  EnTurCard extends HTMLElement {
                 <span class="delay">${delay} min.</span>
               </span>
             </div>
-            
+
             <div class="entur-glance">
               <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
               <span class="time">${time}</span>
@@ -219,7 +221,7 @@ class  EnTurCard extends HTMLElement {
                 <span class="delay">${next_delay} min.</span>
               </span>
             </div>
-            
+
             <div class="entur-glance">
               <ha-icon class="ha-icon clock" icon="mdi:clock"></ha-icon>
               <span class="time">${next_time}</span>
@@ -237,7 +239,7 @@ class  EnTurCard extends HTMLElement {
       }
       enturHtml += `
         </div>
-        
+
       `
     })
     enturHtml += `
