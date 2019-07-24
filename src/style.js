@@ -22,20 +22,22 @@ const style = css`
     }
 
     .entur-item {
-        padding: 0 16px 16px;
+        padding: 1em;
         border-bottom: 1px solid var(--entur-mute-color);
         display: grid;
-        grid-gap: 0px 10px;
+        grid-gap: 1em;
         grid-template-columns: 24px 1fr;
         align-items: start;
-        grid-template-areas:
-            "entur-icon entur-station entur-station entur-station"
-            ". entur-line entur-delay entur-status"
-            ". entur-next entur-next entur-next";
+    }
+
+    .entur-row {
+        grid-column: 2/2;
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: .8em;
     }
 
     .entur-type-icon {
-        grid-area: entur-icon;
         color: var(--entur-primary-color);
         align-self: center;
         width: 100%;
@@ -43,24 +45,22 @@ const style = css`
     }
 
     .entur-station {
-        grid-area: entur-station;
         color: var(--entur-station-color);
         font-size: 1.3em;
         font-weight: 300;
+        margin: .3em 0;
     }
 
     .entur-line {
-        grid-area: entur-line;
         color: var(--entur-primary-color);
         font-size: 1.1em;
-        margin-bottom: .5em;
     }
 
     .entur-human {
         color: var(--entur-text-color);
         font-size: 0.8em;
         display: block;
-        margin-top: 4px;
+        margin-top: .2em;
     }
 
     .entur-human.has-been {
@@ -68,14 +68,14 @@ const style = css`
     }
 
     .entur-delay {
-        grid-area: entur-delay;
-        align-self: center;
         color: var(--entur-warning-color);
+        margin-left: auto;
+        align-self: center;
     }
 
     .entur-status {
-        grid-area: entur-status;
         color: var(--primary-color);
+        margin-left: 1em;
         align-self: center;
     }
 
@@ -84,14 +84,33 @@ const style = css`
     }
 
     .entur-next {
-        grid-area: entur-next;
         color: var(--entur-secondary-color);
-        font-size: 0.9em;
+        font-size: 0.8em;
         font-style: italic;
+        margin-top: .5em;
     }
 
     .entur-next em {
         text-decoration: underline;
-    }`;
+    }
+
+    .entur-extra-departures {
+        margin: .5em 0;
+        padding: .5em 0;
+        border-top: 1px dashed var(--entur-secondary-color);
+    }
+
+    .entur-extra-departure-line {
+        color: var(--entur-secondary-color);
+        line-height: 150%;
+        font-size: 0.9em;
+    }
+
+    .entur--departure-status {
+        color: var(--entur-secondary-color);
+        line-height: 150%;
+        font-size: 0.9em;
+    }
+    `;
 
     export default style;

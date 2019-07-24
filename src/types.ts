@@ -7,6 +7,7 @@ export interface EnturConfig {
   show_clock: boolean;
   show_next: boolean;
   show_human: boolean;
+  show_extra_departures: boolean;
   type: string;
   name?: string;
   show_warning?: boolean;

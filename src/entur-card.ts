@@ -85,7 +85,6 @@ class EnTurCard extends LitElement {
 
           return stateObj ? html`
             <div class="entur-item">
-
               <ha-icon class="entur-type-icon" icon="mdi:${icon}"></ha-icon>
               
               <h2 class="entur-station">
@@ -97,36 +96,43 @@ class EnTurCard extends LitElement {
                 }
               </h2>
 
-              <div class="entur-line">
-                ${line.route}
+              <div class="entur-row">
+                <div class="entur-line">
+                  ${line.route}
 
-                ${this._config.show_human
-                  ? this.isNowOrHasBeen(line.due_with_delay) === false
-                    ? html`<span class="entur-human is-now">${this._translate('arrives')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
-                    : html`<span class="entur-human has-been">${this._translate('arrived')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
+                  ${this._config.show_human
+                    ? this.isNowOrHasBeen(line.due_with_delay) === false
+                      ? html`<span class="entur-human is-now">${this._translate('arrives')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
+                      : html`<span class="entur-human has-been">${this._translate('arrived')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
+                    : html``
+                  }
+
+                  ${this._config.show_next === true && next_line.due_at !== line.due_at
+                    ? html`
+                      <div class="entur-next">
+                      ${this._translate('next_route')} <em>${next_line.route}</em> ${this._translate('at')} ${next_line.due_at}
+                      </div>`
+                    : html``
+                  }
+                </div>
+
+                ${line.delay > 0
+                  ? html`
+                    <div class="entur-delay">
+                      <ha-icon class="entur-icon" icon="mdi:clock-alert-outline"></ha-icon>
+                      ${line.delay} min.
+                    </div>`
                   : html``
                 }
+
+                <div class="entur-status">
+                  <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
+                  ${line.due_at}
+                </div>
               </div>
 
-              ${line.delay > 0
-                ? html`
-                  <div class="entur-delay">
-                    <ha-icon class="entur-icon" icon="mdi:clock-alert-outline"></ha-icon>
-                    ${line.delay} min.
-                  </div>`
-                : html``
-              }
-
-              <div class="entur-status">
-                <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
-                ${line.due_at}
-              </div>
-
-              ${this._config.show_next && next_line.due_at !== line.due_at
-                ? html`
-                  <div class="entur-next">
-                  ${this._translate('next_route')} <em>${next_line.route}</em> ${this._translate('at')} ${next_line.due_at}
-                  </div>`
+              ${this._config.show_extra_departures === true
+                ? html`${this.getExtraDepartures(stateObj.attributes)}`
                 : html``
               }
             </div>
@@ -158,6 +164,33 @@ class EnTurCard extends LitElement {
       delay: stateObj.attributes.next_delay,
       due_at: stateObj.attributes.next_due_at,
     };
+  }
+
+  private getExtraDepartures(obj) {
+    let extraDepartures = [];
+    let getTime = /\b([01]\d|2[0-3]):[0-5]\d/g;
+
+    for (let key of Object.keys(obj)) {
+      if (key.startsWith('departure_')) {
+        let time = obj[key].match(getTime);
+        extraDepartures.push(
+          html`
+            <div class="entur-row">
+              <div class="entur-line">
+                ${obj[key].replace(time,'').replace('ca. ','')}
+                <span class="entur-human is-now">${this._translate('arrives')} ${moment(time, "HH:mm").fromNow()}</span>
+              </div>
+              <div class="entur-status">
+                <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
+                ${time}
+              </div>
+            </div>
+          `
+        );
+      }
+    }
+
+    return extraDepartures;
   }
 
   private isNowOrHasBeen(due_at) {
