@@ -101,9 +101,9 @@ class EnTurCard extends LitElement {
                   ${line.route}
 
                   ${this._config.show_human
-                    ? this.isNowOrHasBeen(line.due_with_delay) === false
-                      ? html`<span class="entur-human is-now">${this._translate('arrives')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
-                      : html`<span class="entur-human has-been">${this._translate('arrived')} ${moment(line.due_with_delay, "HH:mm:ss").fromNow()}</span>`
+                    ? this.isNowOrHasBeen(line.due_at) === false
+                      ? html`<span class="entur-human is-now">${this._translate('arrives')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
+                      : html`<span class="entur-human has-been">${this._translate('arrived')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
                     : html``
                   }
 
@@ -154,7 +154,6 @@ class EnTurCard extends LitElement {
       route: stateObj.attributes.route,
       delay: stateObj.attributes.delay,
       due_at: stateObj.attributes.due_at,
-      due_with_delay: moment(stateObj.attributes.due_at, "HH:mm:ss").add(stateObj.attributes.delay, "m").format("HH:mm:ss"),
     };
   }
 

@@ -79,3 +79,5 @@ If you define entities as objects instead of strings, you can add more customiza
 ```
 
 ⭐️ this repository if you found it useful ❤️
+
+<a href="https://www.buymeacoffee.com/jonkristian" target="_blank"><img src="https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/white_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
