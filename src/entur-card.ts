@@ -12,8 +12,8 @@ import {
   HomeAssistant,
   handleClick
 } from "custom-card-helpers";
-import style from './style';
 import moment from 'moment/src/moment';
+import style from './style';
 import 'moment/src/locale/nb';
 
 import { EnturConfig } from "./types";
@@ -54,6 +54,8 @@ class EnTurCard extends LitElement {
   };
 
   protected render(): TemplateResult | void {
+    moment.locale(this.hass.language);
+
     if (!this._config || !this.hass) {
       return html``;
     }
@@ -166,17 +168,18 @@ class EnTurCard extends LitElement {
   }
 
   private getExtraDepartures(obj) {
-    let extraDepartures = [];
-    let getTime = /\b([01]\d|2[0-3]):[0-5]\d/g;
+    const extraDepartures = [];
+    const getTime = /\b([01]\d|2[0-3]):[0-5]\d/g;
 
-    for (let key of Object.keys(obj)) {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key of Object.keys(obj)) {
       if (key.startsWith('departure_')) {
-        let time = obj[key].match(getTime);
+        const time = obj[key].match(getTime);
         extraDepartures.push(
           html`
             <div class="entur-row">
               <div class="entur-line">
-                ${obj[key].replace(time,'').replace('ca. ','')}
+                ${obj[key].replace(time, '').replace('ca. ', '')}
                 <span class="entur-human is-now">${this._translate('arrives')} ${moment(time, "HH:mm").fromNow()}</span>
               </div>
               <div class="entur-status">
@@ -193,10 +196,10 @@ class EnTurCard extends LitElement {
   }
 
   private isNowOrHasBeen(due_at) {
-    let now = moment();
-    let when = moment(due_at, "HH:mm:ss");
+    const now = moment();
+    const when = moment(due_at, "HH:mm:ss");
 
-    return (now > when ? true : false);
+    return (now > when);
   }
 
   private _handleTap(): void {
