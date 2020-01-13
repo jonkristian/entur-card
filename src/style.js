@@ -9,6 +9,13 @@ const style = css`
         --entur-warning-color: rgba(231, 76, 60, .8);
     }
 
+    .warning {
+        display: block;
+        color: black;
+        background-color: #fce588;
+        padding: 8px;
+    }
+
     .entur-header {
         display: flex;
     }

@@ -42,6 +42,7 @@ class EnTurCard extends LitElement {
       arrived: 'Left about',
       delayed: 'Delayed',
       next_route: 'Next:',
+      entity_error: 'Entity could not be found.',
     },
     nb: {
       at: 'klokken',
@@ -50,6 +51,7 @@ class EnTurCard extends LitElement {
       arrived: 'Gikk for',
       delayed: 'Forsinket',
       next_route: 'Neste avgang:',
+      entity_error: 'Kunne ikke finne entiteten.',
     }
   };
 
@@ -78,6 +80,18 @@ class EnTurCard extends LitElement {
 
         ${this._config.entities.map((entity) => {
           const stateObj = this.hass.states[entity.entity];
+
+          if ( undefined === stateObj ) {
+            return html`
+            <ha-card>
+              <div class="warning">
+                <ha-icon class="warning-icon" icon="mdi:comment-alert-outline"></ha-icon>
+                ${this._translate('entity_error')}
+              </div>
+            </ha-card>
+            `;
+          }
+
           const station_name = entity.name ? entity.name : stateObj.attributes.friendly_name.match(/entur (.+?)(?= platform|$)/i)[1];
           const icon = entity.icon ? entity.icon : stateObj.attributes.icon;
           const destination = entity.destination ? entity.destination : 'unavailable';
