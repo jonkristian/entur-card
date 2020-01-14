@@ -1,0 +1,12 @@
+{
+  "version": "Version",
+  "invalid_configuration": "Invalid configuration",
+  "show_warning": "Show Warning",
+  "at": "klokken",
+  "to": "Til",
+  "arrives": "Avgang",
+  "arrived": "Gikk for",
+  "delayed": "Forsinket",
+  "next_route": "Neste avgang:",
+  "entity_error": "Kunne ikke finne entiteten."
+}

@@ -11,12 +11,14 @@ import {
 import {
   HomeAssistant,
   handleClick
-} from "custom-card-helpers";
+} from 'custom-card-helpers';
+
 import moment from 'moment/src/moment';
 import style from './style';
 import 'moment/src/locale/nb';
 
 import { EnturConfig } from "./types";
+import { localize } from './localize/localize';
 
 @customElement("entur-card")
 class EnTurCard extends LitElement {
@@ -28,35 +30,18 @@ class EnTurCard extends LitElement {
   public setConfig(config: EnturConfig): void {
     // TODO Check for required fields and that they are of the proper format
     if (!config || config.show_error) {
-      throw new Error("Invalid configuration");
+      throw new Error(localize('invalid_configuration'));
     }
 
     this._config = config;
   }
 
-  readonly _lang = {
-    en: {
-      at: 'at',
-      to: 'To',
-      arrives: 'Arrives',
-      arrived: 'Left about',
-      delayed: 'Delayed',
-      next_route: 'Next:',
-      entity_error: 'Entity could not be found.',
-    },
-    nb: {
-      at: 'klokken',
-      to: 'Til',
-      arrives: 'Avgang',
-      arrived: 'Gikk for',
-      delayed: 'Forsinket',
-      next_route: 'Neste avgang:',
-      entity_error: 'Kunne ikke finne entiteten.',
-    }
-  };
-
   protected render(): TemplateResult | void {
-    moment.locale(this.hass.language);
+    if (['en', 'nb'].includes(this.hass.selectedLanguage)) {
+      moment.locale(this.hass.selectedLanguage);
+    } else {
+      moment.locale('en');
+    }
 
     if (!this._config || !this.hass) {
       return html``;
@@ -66,7 +51,7 @@ class EnTurCard extends LitElement {
     if (this._config.show_warning) {
       return html`
         <ha-card>
-          <div class="warning">Show Warning</div>
+          <div class="warning">${localize('show_warning')}</div>
         </ha-card>
       `;
     }
@@ -81,12 +66,12 @@ class EnTurCard extends LitElement {
         ${this._config.entities.map((entity) => {
           const stateObj = this.hass.states[entity.entity];
 
-          if ( undefined === stateObj ) {
+          if (undefined === stateObj) {
             return html`
             <ha-card>
               <div class="warning">
                 <ha-icon class="warning-icon" icon="mdi:comment-alert-outline"></ha-icon>
-                ${this._translate('entity_error')}
+                ${localize('entity_error')}
               </div>
             </ha-card>
             `;
@@ -118,15 +103,15 @@ class EnTurCard extends LitElement {
 
                   ${this._config.show_human
                     ? this.isNowOrHasBeen(line.due_at) === false
-                      ? html`<span class="entur-human is-now">${this._translate('arrives')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
-                      : html`<span class="entur-human has-been">${this._translate('arrived')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
+                      ? html`<span class="entur-human is-now">${localize('arrives')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
+                      : html`<span class="entur-human has-been">${localize('arrived')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
                     : html``
                   }
 
                   ${this._config.show_next === true && next_line.due_at !== line.due_at
                     ? html`
                       <div class="entur-next">
-                      ${this._translate('next_route')} <em>${next_line.route}</em> ${this._translate('at')} ${next_line.due_at}
+                      ${localize('next_route')} <em>${next_line.route}</em> ${localize('at')} ${next_line.due_at}
                       </div>`
                     : html``
                   }
@@ -194,7 +179,7 @@ class EnTurCard extends LitElement {
             <div class="entur-row">
               <div class="entur-line">
                 ${obj[key].replace(time, '').replace('ca. ', '')}
-                <span class="entur-human is-now">${this._translate('arrives')} ${moment(time, "HH:mm").fromNow()}</span>
+                <span class="entur-human is-now">${localize('arrives')} ${moment(time, "HH:mm").fromNow()}</span>
               </div>
               <div class="entur-status">
                 <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
@@ -218,10 +203,6 @@ class EnTurCard extends LitElement {
 
   private _handleTap(): void {
     handleClick(this, this.hass!, this._config!, false, false);
-  }
-
-  private _translate(key) {
-    return this._lang[this.hass.language][key];
   }
 
   static get styles(): CSSResult {
