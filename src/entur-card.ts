@@ -1,39 +1,58 @@
 /* eslint indent: "off" */
 /* eslint no-undef: "off" */
-import {
-  LitElement,
-  html,
-  customElement,
-  property,
-  CSSResult,
-  TemplateResult
-} from 'lit-element';
-import {
-  HomeAssistant,
-  handleClick
-} from 'custom-card-helpers';
+import { LitElement, html, customElement, property, CSSResult, TemplateResult } from 'lit-element';
+import { HomeAssistant, LovelaceCardEditor, getLovelace, LovelaceCard } from 'custom-card-helpers';
 
 import moment from 'moment/src/moment';
-import style from './style';
 import 'moment/src/locale/nb';
+import style from './style';
 
-import { EnturConfig } from "./types";
+import { EnturCardConfig } from './types';
 import { localize } from './localize/localize';
+import { CARD_VERSION } from './const';
 
-@customElement("entur-card")
-class EnTurCard extends LitElement {
-  // Add any properities that should cause your element to re-render here.
+/* eslint no-console: 0 */
+console.info(
+  `%c  ENTUR-CARD \n%c  ${localize('common.version')} ${CARD_VERSION}    `,
+  'color: orange; font-weight: bold; background: black',
+  'color: white; font-weight: bold; background: dimgray',
+);
+
+(window as any).customCards = (window as any).customCards || [];
+(window as any).customCards.push({
+  type: 'entur-card',
+  name: 'Entur Card',
+  description: 'This card is made to work with the Entur public transport component.',
+});
+
+
+@customElement('entur-card')
+export class EnTurCard extends LitElement {
+  public static async getConfigElement(): Promise<LovelaceCardEditor> {
+    return document.createElement('boilerplate-card-editor') as LovelaceCardEditor;
+  }
+
+  public static getStubConfig(): object {
+    return {};
+  }
+
   @property() public hass?: HomeAssistant;
+  @property() private _config?: EnturCardConfig;
 
-  @property() private _config?: EnturConfig;
-
-  public setConfig(config: EnturConfig): void {
+  public setConfig(config: EnturCardConfig): void {
     // TODO Check for required fields and that they are of the proper format
     if (!config || config.show_error) {
-      throw new Error(localize('invalid_configuration'));
+      throw new Error(localize('common.invalid_configuration'));
     }
 
-    this._config = config;
+    if (config.test_gui) {
+      getLovelace().setEditMode(true);
+    }
+
+    this._config = {
+      name: 'EnturCard',
+      ...config,
+    };
   }
 
   protected render(): TemplateResult | void {
@@ -43,24 +62,23 @@ class EnTurCard extends LitElement {
       moment.locale('en');
     }
 
-    if (!this._config || !this.hass) {
-      return html``;
-    }
-
-    // TODO Check for stateObj or other necessary things and render a warning if missing
     if (this._config.show_warning) {
-      return html`
-        <ha-card>
-          <div class="warning">${localize('show_warning')}</div>
-        </ha-card>
-      `;
+      return this.showWarning(localize('common.show_warning'));
     }
 
     return html`
-      <ha-card @ha-click="${this._handleTap}">
+      <ha-card>
         <div class="card-header entur-header">
-          ${this._config.name !== undefined ? html`<div class="entur-name">${this._config.name}</div>` : html``}
-          ${this._config.show_clock === true ? html`<div class="entur-clock">${this.getTime()}</div>` : html``}
+          ${undefined !== this._config.name
+            ? html`
+              <div class="entur-name">${this._config.name}</div>
+            ` : html``
+          }
+          ${true === this._config.show_clock
+            ? html`
+              <div class="entur-clock">${this.getTime()}</div>
+            ` : html``
+          }
         </div>
 
         ${this._config.entities.map((entity) => {
@@ -71,7 +89,7 @@ class EnTurCard extends LitElement {
             <ha-card>
               <div class="warning">
                 <ha-icon class="warning-icon" icon="mdi:comment-alert-outline"></ha-icon>
-                ${localize('entity_error')}
+                ${localize('common.entity_error')}
               </div>
             </ha-card>
             `;
@@ -84,63 +102,63 @@ class EnTurCard extends LitElement {
           const line = this.getLineInfo(stateObj);
           const next_line = this.getNextLineInfo(stateObj);
 
-          return stateObj ? html`
-            <div class="entur-item">
-              <ha-icon class="entur-type-icon" icon="mdi:${icon}"></ha-icon>
-              
-              <h2 class="entur-station">
-                ${station_name}
-                
-                ${destination !== 'unavailable'
-                  ? html` <ha-icon class="entur-icon" icon="mdi:chevron-right"></ha-icon> ${destination}`
-                  : html``
-                }
-              </h2>
+          return stateObj
+            ? html`
+                <div class="entur-item">
+                  <ha-icon class="entur-type-icon" icon="${icon}"></ha-icon>
 
-              <div class="entur-row">
-                <div class="entur-line">
-                  ${line.route}
+                  <h2 class="entur-station">
+                    ${station_name}
+                    ${destination !== 'unavailable'
+                      ? html`
+                          <ha-icon class="entur-icon" icon="mdi:chevron-right"></ha-icon> ${destination}
+                        `
+                      : html``}
+                  </h2>
 
-                  ${this._config.show_human
-                    ? this.isNowOrHasBeen(line.due_at) === false
-                      ? html`<span class="entur-human is-now">${localize('arrives')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
-                      : html`<span class="entur-human has-been">${localize('arrived')} ${moment(line.due_at, "HH:mm:ss").fromNow()}</span>`
-                    : html``
-                  }
+                  <div class="entur-row">
+                    <div class="entur-line">
+                      ${line.route}
+                      ${true === this._config.show_human && line.delay == 0
+                        ? html`
+                            ${this.isNowOrHasBeen(line.due_at)}
+                          `
+                        : html``}
+                      ${true === this._config.show_next && next_line.due_at !== line.due_at
+                        ? html`
+                            <div class="entur-next">
+                              <em>${next_line.route}</em> ${localize('common.at')}
+                              ${next_line.due_at}
+                            </div>
+                          `
+                        : html``}
+                    </div>
 
-                  ${this._config.show_next === true && next_line.due_at !== line.due_at
+                    ${line.delay > 0
+                      ? html`
+                          <div class="entur-delay">
+                            <ha-icon class="entur-icon" icon="mdi:clock-alert-outline"></ha-icon>
+                            ${line.delay} min.
+                          </div>
+                        `
+                      : html``}
+
+                    <div class="entur-status">
+                      <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
+                      ${line.due_at}
+                    </div>
+                  </div>
+
+                  ${true === this._config.show_extra_departures
                     ? html`
-                      <div class="entur-next">
-                      ${localize('next_route')} <em>${next_line.route}</em> ${localize('at')} ${next_line.due_at}
-                      </div>`
-                    : html``
-                  }
+                        ${this.getExtraDepartures(stateObj.attributes)}
+                      `
+                    : html``}
                 </div>
-
-                ${line.delay > 0
-                  ? html`
-                    <div class="entur-delay">
-                      <ha-icon class="entur-icon" icon="mdi:clock-alert-outline"></ha-icon>
-                      ${line.delay} min.
-                    </div>`
-                  : html``
-                }
-
-                <div class="entur-status">
-                  <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
-                  ${line.due_at}
-                </div>
-              </div>
-
-              ${this._config.show_extra_departures === true
-                ? html`${this.getExtraDepartures(stateObj.attributes)}`
-                : html``
-              }
-            </div>
-          `
-          : html`
-            <div class="not-found">Entity ${entity} not found.</div>
-          `;
+              `
+            : html`
+                <div class="not-found">Entity ${entity} not found.</div>
+              `;
         })}
       </ha-card>
     `;
@@ -167,10 +185,33 @@ class EnTurCard extends LitElement {
   }
 
   private getExtraDepartures(obj) {
+    // eslint-disable-next-line no-restricted-syntax
     const extraDepartures = [];
+
+    // Pull time from string 'departure_*' (HH:mm)
     const getTime = /\b([01]\d|2[0-3]):[0-5]\d/g;
 
-    // eslint-disable-next-line no-restricted-syntax
+    // If show_next is false make sure the next departure is part of extra departures.
+    if ( true !==  this._config.show_next ) {
+      extraDepartures.push(
+        html`
+          <div class="entur-row">
+            <div class="entur-line">
+              ${obj.next_route}
+              ${true === this._config.show_human
+                ? html`${this.isNowOrHasBeen(obj.next_due_at)}`
+                : html``
+              }
+            </div>
+            <div class="entur-status">
+              <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
+              ${obj.next_due_at}
+            </div>
+          </div>
+        `
+      );
+    }
+
     for (const key of Object.keys(obj)) {
       if (key.startsWith('departure_')) {
         const time = obj[key].match(getTime);
@@ -179,14 +220,19 @@ class EnTurCard extends LitElement {
             <div class="entur-row">
               <div class="entur-line">
                 ${obj[key].replace(time, '').replace('ca. ', '')}
-                <span class="entur-human is-now">${localize('arrives')} ${moment(time, "HH:mm").fromNow()}</span>
+                ${true === this._config.show_human
+                  ? html`
+                  ${this.isNowOrHasBeen(time)}
+                  `
+                  : html``
+                }
               </div>
               <div class="entur-status">
                 <ha-icon class="entur-icon" icon="mdi:clock"></ha-icon>
                 ${time}
               </div>
             </div>
-          `
+          `,
         );
       }
     }
@@ -196,13 +242,36 @@ class EnTurCard extends LitElement {
 
   private isNowOrHasBeen(due_at) {
     const now = moment();
-    const when = moment(due_at, "HH:mm:ss");
+    const when = moment(due_at, 'HH:mm:ss');
 
-    return (now > when);
+    if (when > now) {
+      return html`
+        <span class="entur-human is-now">
+          ${localize('common.arrives')} ${moment(due_at, 'HH:mm:ss').fromNow()}
+        </span>
+      `;
+    } else if (when.add(15, 'seconds') > now) {
+      return html`
+        <span class="entur-human has-been">
+          ${localize('common.arrived')} ${moment(due_at, 'HH:mm:ss').fromNow()}
+        </span>
+      `;
+    } else {
+      return html`
+        <span class="entur-human coming-up">
+          ${localize('common.coming')}
+          ${moment(due_at, 'HH:mm:ss')
+            .add(1, 'days')
+            .fromNow()}
+        </span>
+      `;
+    }
   }
 
-  private _handleTap(): void {
-    handleClick(this, this.hass!, this._config!, false, false);
+  private showWarning(warning: string): TemplateResult {
+    return html`
+      <hui-warning>${warning}</hui-warning>
+    `;
   }
 
   static get styles(): CSSResult {

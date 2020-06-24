@@ -1,12 +1,14 @@
 {
-  "version": "Versjon",
-  "invalid_configuration": "Ikke gyldig konfiguration",
-  "show_warning": "Vis advarsel",
-  "at": "at",
-  "to": "To",
-  "arrives": "Arrives",
-  "arrived": "Left about",
-  "delayed": "Delayed",
-  "next_route": "Next:",
-  "entity_error": "Entity could not be found."
+  "common": {
+    "version": "Versjon",
+    "invalid_configuration": "Ugyldig konfiguration",
+    "show_warning": "Vis advarsel",
+    "at": "at",
+    "to": "To",
+    "arrives": "Arrives",
+    "arrived": "Left about",
+    "coming": "Leaves",
+    "delayed": "Delayed",
+    "entity_error": "Entity could not be found."
+  }
 }

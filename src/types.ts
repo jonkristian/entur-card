@@ -1,7 +1,6 @@
-import { ActionConfig } from "custom-card-helpers";
+import { ActionConfig, LovelaceCardConfig } from 'custom-card-helpers';
 
-// TODO Add your configuration elements here for type-checking
-export interface EnturConfig {
+export interface EnturCardConfig extends LovelaceCardConfig {
   entities: any[];
   state: object;
   show_clock: boolean;
@@ -15,4 +14,5 @@ export interface EnturConfig {
   entity?: string;
   tap_aciton?: ActionConfig;
   hold_action?: ActionConfig;
+  double_tap_action?: ActionConfig;
 }

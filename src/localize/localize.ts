@@ -26,5 +26,4 @@ export function localize(string: string, search: string = '', replace: string = 
     tranlated = tranlated.replace(search, replace);
   }
   return tranlated;
-
 }

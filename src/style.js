@@ -1,18 +1,10 @@
 import { css } from 'lit-element';
 
 const style = css`
-    :host {
-        --entur-primary-color: #44739e;
-        --entur-secondary-color: #9e9e9e;
-        --entur-station-color: #666;
-        --entur-mute-color: #efefef;
-        --entur-warning-color: rgba(231, 76, 60, .8);
-    }
-
     .warning {
         display: block;
         color: black;
-        background-color: #fce588;
+        background-color: var(--label-badge-yellow);
         padding: 8px;
     }
 
@@ -30,9 +22,8 @@ const style = css`
 
     .entur-item {
         padding: 1em;
-        border-bottom: 1px solid var(--entur-mute-color);
         display: grid;
-        grid-gap: 1em;
+        grid-gap: 10px;
         grid-template-columns: 24px 1fr;
         align-items: start;
     }
@@ -41,48 +32,55 @@ const style = css`
         grid-column: 2/2;
         display: flex;
         justify-content: space-between;
-        padding-bottom: .8em;
+        padding-bottom: 10px;
     }
 
     .entur-type-icon {
-        color: var(--entur-primary-color);
         align-self: center;
         width: 100%;
         height: auto;
     }
 
     .entur-station {
-        color: var(--entur-station-color);
-        font-size: 1.3em;
+        color: var(--primary-text-color);
+        font-size: 18px;
         font-weight: 300;
         margin: .3em 0;
     }
 
     .entur-line {
-        color: var(--entur-primary-color);
+        color: var(--primary-text-color);
         font-size: 1.1em;
     }
 
     .entur-human {
-        color: var(--entur-text-color);
+        color: var(--primary-text-color);
         font-size: 0.8em;
         display: block;
-        margin-top: .2em;
+        margin-top: 4px;
+    }
+
+    .entur-human.is-now {
+        color: var(--primary-text-color);
     }
 
     .entur-human.has-been {
-        color: var(--entur-warning-color);
+        color: var(--error-color);
+    }
+
+    .entur-human.coming-up {
+        color: var(--secondary-text-color);
     }
 
     .entur-delay {
-        color: var(--entur-warning-color);
+        color: var(--error-color);
         margin-left: auto;
         align-self: center;
     }
 
     .entur-status {
-        color: var(--primary-color);
-        margin-left: 1em;
+        color: var(--dark-primary-color);
+        margin-left: 10px;
         align-self: center;
     }
 
@@ -91,10 +89,10 @@ const style = css`
     }
 
     .entur-next {
-        color: var(--entur-secondary-color);
-        font-size: 0.8em;
+        color: var(--secondary-text-color);
+        font-size: 13px;
         font-style: italic;
-        margin-top: .5em;
+        margin-top: 8px;
     }
 
     .entur-next em {
@@ -104,17 +102,17 @@ const style = css`
     .entur-extra-departures {
         margin: .5em 0;
         padding: .5em 0;
-        border-top: 1px dashed var(--entur-secondary-color);
+        border-top: 1px dashed var(--divider-color);
     }
 
     .entur-extra-departure-line {
-        color: var(--entur-secondary-color);
+        color: var(--secondary-text-color);
         line-height: 150%;
         font-size: 0.9em;
     }
 
     .entur--departure-status {
-        color: var(--entur-secondary-color);
+        color: var(--secondary-text-color);
         line-height: 150%;
         font-size: 0.9em;
     }
