@@ -27,15 +27,7 @@ console.info(
 
 
 @customElement('entur-card')
-export class EnTurCard extends LitElement {
-  public static async getConfigElement(): Promise<LovelaceCardEditor> {
-    return document.createElement('boilerplate-card-editor') as LovelaceCardEditor;
-  }
-
-  public static getStubConfig(): object {
-    return {};
-  }
-
+class EnTurCard extends LitElement {
   @property() public hass?: HomeAssistant;
   @property() private _config?: EnturCardConfig;
 

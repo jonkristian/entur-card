@@ -7682,12 +7682,6 @@ window.customCards.push({
     description: 'This card is made to work with the Entur public transport component.',
 });
 let EnTurCard = class EnTurCard extends LitElement {
-    static async getConfigElement() {
-        return document.createElement('boilerplate-card-editor');
-    }
-    static getStubConfig() {
-        return {};
-    }
     setConfig(config) {
         // TODO Check for required fields and that they are of the proper format
         if (!config || config.show_error) {
@@ -7907,5 +7901,3 @@ __decorate([
 EnTurCard = __decorate([
     customElement('entur-card')
 ], EnTurCard);
-
-export { EnTurCard };
