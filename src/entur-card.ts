@@ -3,7 +3,7 @@
 import { LitElement, html, customElement, property, CSSResult, TemplateResult } from 'lit-element';
 import { HomeAssistant, LovelaceCardEditor, getLovelace, LovelaceCard } from 'custom-card-helpers';
 
-import moment from 'moment/src/moment';
+import moment from 'moment';
 import 'moment/src/locale/nb';
 import style from './style';
 
