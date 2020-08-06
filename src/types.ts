@@ -8,7 +8,7 @@ export interface EnturCardConfig extends LovelaceCardConfig {
   show_human: boolean;
   show_extra_departures: boolean;
   type: string;
-  name?: string;
+  name?: string | false;
   show_warning?: boolean;
   show_error?: boolean;
   entity?: string;

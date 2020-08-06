@@ -3,7 +3,7 @@
 import { LitElement, html, customElement, property, CSSResult, TemplateResult } from 'lit-element';
 import { HomeAssistant, LovelaceCardEditor, getLovelace, LovelaceCard } from 'custom-card-helpers';
 
-import moment from 'moment/src/moment';
+import moment from 'moment';
 import 'moment/src/locale/nb';
 import style from './style';
 
@@ -58,10 +58,10 @@ class EnTurCard extends LitElement {
       return this.showWarning(localize('common.show_warning'));
     }
 
-    return html`
-      <ha-card>
+    const header = (this._config.name || this._config.show_clock)
+      ? html`
         <div class="card-header entur-header">
-          ${undefined !== this._config.name
+          ${false !== this._config.name
             ? html`
               <div class="entur-name">${this._config.name}</div>
             ` : html``
@@ -72,7 +72,12 @@ class EnTurCard extends LitElement {
             ` : html``
           }
         </div>
+        `
+        : undefined
 
+    return html`
+      <ha-card>
+        ${header}
         ${this._config.entities.map((entity) => {
           const stateObj = this.hass.states[entity.entity];
 
