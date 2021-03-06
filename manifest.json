@@ -4,5 +4,6 @@
   "documentation": "https://github.com/jonkristian/entur-card",
   "dependencies": [],
   "codeowners": ["@jonkristian"],
-  "requirements": []
+  "requirements": [],
+  "version": "1.0.0"
 }

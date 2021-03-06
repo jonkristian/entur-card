@@ -3,8 +3,13 @@
 import { LitElement, html, customElement, property, CSSResult, TemplateResult } from 'lit-element';
 import { HomeAssistant, LovelaceCardEditor, getLovelace, LovelaceCard } from 'custom-card-helpers';
 
-import moment from 'moment';
-import 'moment/src/locale/nb';
+import dayjs from 'dayjs';
+import 'dayjs/locale/nb';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+dayjs.extend(customParseFormat);
+
 import style from './style';
 
 import { EnturCardConfig } from './types';
@@ -49,9 +54,9 @@ class EnTurCard extends LitElement {
 
   protected render(): TemplateResult | void {
     if (['en', 'nb'].includes(this.hass.selectedLanguage)) {
-      moment.locale(this.hass.selectedLanguage);
+      dayjs.locale(this.hass.selectedLanguage);
     } else {
-      moment.locale('en');
+      dayjs.locale('en');
     }
 
     if (this._config.show_warning) {
@@ -162,7 +167,7 @@ class EnTurCard extends LitElement {
   }
 
   private getTime() {
-    return moment().format('HH:mm');
+    return dayjs().format('HH:mm');
   }
 
   private getLineInfo(stateObj) {
@@ -219,7 +224,7 @@ class EnTurCard extends LitElement {
                 ${obj[key].replace(time, '').replace('ca. ', '')}
                 ${true === this._config.show_human
                   ? html`
-                  ${this.isNowOrHasBeen(time)}
+                  ${this.isNowOrHasBeen(time[0])}
                   `
                   : html``
                 }
@@ -238,28 +243,29 @@ class EnTurCard extends LitElement {
   }
 
   private isNowOrHasBeen(due_at) {
-    const now = moment();
-    const when = moment(due_at, 'HH:mm:ss');
+    const now = dayjs();
+    const when = dayjs(due_at, 'H:mm');
+    const target = dayjs(due_at, 'H:mm');
 
     if (when > now) {
       return html`
         <span class="entur-human is-now">
-          ${localize('common.arrives')} ${moment(due_at, 'HH:mm:ss').fromNow()}
+          ${localize('common.arrives')}
+          ${dayjs(target).fromNow()}
         </span>
       `;
-    } else if (when.add(15, 'seconds') > now) {
+    } else if (when.add(15, 'second') > now) {
       return html`
         <span class="entur-human has-been">
-          ${localize('common.arrived')} ${moment(due_at, 'HH:mm:ss').fromNow()}
+          ${localize('common.arrived')}
+          ${dayjs(target).fromNow()}
         </span>
       `;
     } else {
       return html`
         <span class="entur-human coming-up">
           ${localize('common.coming')}
-          ${moment(due_at, 'HH:mm:ss')
-            .add(1, 'days')
-            .fromNow()}
+          ${dayjs(target).add(1, 'day').fromNow()}
         </span>
       `;
     }

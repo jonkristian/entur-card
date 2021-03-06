@@ -1,7 +1,9 @@
 # Entur Card
+
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge)](https://github.com/custom-components/hacs)
+
 This card is made to work with the [Entur public transport](https://www.home-assistant.io/components/sensor.entur_public_transport/) component. You will have to configure the Entur component before you can use this card.
 To easily extract stop id's from entur you can log in [here](https://stoppested.entur.org) with username and password **guest**.
-
 
 [![image.png](https://i.postimg.cc/KjGQ2pwz/image.png)](https://postimg.cc/S2PcLdyF)
 
