@@ -29,7 +29,7 @@ resources:
 (string)(Required) custom:entur-card
 
 **name**
-(string)(Required) Name of the card
+(string) Name of the card (set to false to disable)
 
 **show_clock**
 (boolean) Display clock
