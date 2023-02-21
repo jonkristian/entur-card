@@ -1,9 +1,9 @@
 {
   "common": {
-    "version": "Versjon",
-    "invalid_configuration": "Ugyldig konfiguration",
-    "show_warning": "Vis advarsel",
-    "at": "at",
+    "version": "Version",
+    "invalid_configuration": "Invalid configuration",
+    "show_warning": "Show warning",
+    "at": "At",
     "to": "To",
     "arrives": "Arrives",
     "arrived": "Left about",
