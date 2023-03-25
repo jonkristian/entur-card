@@ -601,7 +601,7 @@ var e=function(t,i){return e=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
           @edit-detail-element=${this._editDetailElement}
         >
         </entur-card-entity-editor>
-      `;const t=Object.keys(this.hass.states).filter((e=>e.startsWith("sensor.transport")));return U`
+      `;const t=Object.values(this.hass.states).filter((e=>e.entity_id.startsWith("sensor."))).filter((e=>Object.keys(e.attributes).some((e=>e.toLowerCase().includes("route_id"))))).map((e=>e.entity_id));return U`
       <div class="card-config">
         <ha-textfield
           class="card-title"

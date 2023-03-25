@@ -89,10 +89,15 @@ export class EnturCardEditor
       `;
     }
 
-    // Find all starting with 'sensor.transport'.
-    const entities = Object.keys(this.hass!.states).filter((k) =>
-      k.startsWith("sensor.transport")
-    );
+    // Filter states to only include sensors, and only those with an attribute containing a "route_id".
+    const sensorsWithRouteId = Object.values(this.hass!.states)
+      .filter((entity) => entity.entity_id.startsWith("sensor."))
+      .filter((sensor) =>
+        Object.keys(sensor.attributes).some((key) =>
+          key.toLowerCase().includes("route_id")
+        )
+      )
+      .map((sensor) => sensor.entity_id);
 
     return html`
       <div class="card-config">
@@ -170,7 +175,7 @@ export class EnturCardEditor
           fixedMenuPosition
           naturalMenuWidth
         >
-          ${entities.map(
+          ${sensorsWithRouteId.map(
             (entity) => html`
               <mwc-list-item .value=${entity}> ${entity} </mwc-list-item>
             `
