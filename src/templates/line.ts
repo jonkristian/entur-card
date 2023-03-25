@@ -77,7 +77,7 @@ export class EnturCardLine extends LitElement {
             >
               <div class="entur-line__header">
                 ${this.route.attributes.next_route}
-                ${this._renderHumanReadable("next")}
+                ${this._renderHumanReadable("line_next")}
               </div>
               <div
                 class="entur-line__due entur-column icon-${this.entity
@@ -139,7 +139,7 @@ export class EnturCardLine extends LitElement {
       const now = dayjs();
       let due, delay;
       if (type == "line_next") {
-        due = dayjs(this.route.attributes.next_due_at);
+        due = dayjs(this.route.attributes.next_due_at, "H:mm");
         delay = this.route.attributes.next_delay;
       } else {
         due = dayjs(this.route.attributes.due_at, "H:mm");
@@ -151,7 +151,7 @@ export class EnturCardLine extends LitElement {
       }
 
       if (!due.isValid()) {
-        return html`Couldn't render time`;
+        return html``;
       }
 
       if (due > now) {
