@@ -1,0 +1,11 @@
+default_config:
+demo:
+
+sensor:
+  - platform: entur_public_transport
+    name: Transport
+    show_on_map: true
+    stop_ids:
+      - "NSR:StopPlace:548" # Bergen train station
+      - "NSR:StopPlace:5850" # Grorud T bus stop
+      - "NSR:StopPlace:58652" # Mortavika ferry

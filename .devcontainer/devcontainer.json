@@ -1,31 +1,40 @@
 {
-  "name": "Entur Card Development",
-  "image": "ludeeus/devcontainer:monster-stable",
-  "context": "..",
-  "appPort": ["5000:5000", "9123:8123"],
-  "postCreateCommand": "npm install",
-  "runArgs": [
-    "-v",
-    "${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
+  "image": "thomasloven/hass-custom-devcontainer",
+  "onCreateCommand": "sudo chown -R vscode:nvm /usr/local/share/nvm && npm install -g pnpm",
+  "postCreateCommand": "sudo -E container setup && pnpm config set store-dir $XDG_DATA_HOME && pnpm install",
+  "forwardPorts": [8123, 5173],
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/config/www/workspace,type=bind",
+    "source=${localWorkspaceFolder}/.devcontainer/config,target=/config/config,type=bind",
+    "source=${localWorkspaceFolder}/.devcontainer/config/configuration.yaml,target=/config/configuration.yaml,type=bind"
   ],
-  "extensions": [
-    "github.vscode-pull-request-github",
-    "eamodio.gitlens",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "bierner.lit-html",
-    "runem.lit-plugin",
-    "auchenberg.vscode-browser-preview",
-    "davidanson.vscode-markdownlint",
-    "redhat.vscode-yaml"
-  ],
-  "settings": {
-    "files.eol": "\n",
-    "editor.tabSize": 4,
-    "terminal.integrated.shell.linux": "/bin/bash",
-    "editor.formatOnPaste": false,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "files.trimTrailingWhitespace": true
+  "containerEnv": {
+    "HASS_USERNAME": "dev",
+    "HASS_PASSWORD": "dev",
+    "LOVELACE_LOCAL_FILES": "./dist/entur-card.js",
+    "XDG_DATA_HOME": "/home/vscode/.local/share"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "runem.lit-plugin",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "files.eol": "\n",
+        "editor.tabSize": 2,
+        "editor.formatOnPaste": false,
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "files.trimTrailingWhitespace": true
+      }
+    }
   }
 }

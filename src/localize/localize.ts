@@ -1,29 +1,33 @@
-import * as en from './languages/en.json';
-import * as nb from './languages/nb.json';
+import { HomeAssistant } from "custom-card-helpers";
+import * as en from "./languages/en.json";
+import * as nb from "./languages/nb.json";
 
-var languages = {
-  en: en,
-  nb: nb,
+const languages: Record<string, unknown> = {
+  en,
+  nb,
 };
 
-export function localize(string: string, search: string = '', replace: string = '') {
-  const section = string.split('.')[0];
-  const key = string.split('.')[1];
+const DEFAULT_LANG = "en";
 
-  const lang = (localStorage.getItem('selectedLanguage') || 'en').replace(/['"]+/g, '').replace('-', '_');
-
-  var tranlated: string;
-
+function getTranslatedString(key: string, lang: string): string | undefined {
   try {
-    tranlated = languages[lang][section][key];
-  } catch (e) {
-    tranlated = languages['en'][section][key];
+    return key
+      .split(".")
+      .reduce(
+        (o, i) => (o as Record<string, unknown>)[i],
+        languages[lang]
+      ) as string;
+  } catch (_) {
+    return undefined;
   }
+}
 
-  if (tranlated === undefined) tranlated = languages['en'][section][key];
+export default function setupCustomlocalize(hass?: HomeAssistant) {
+  return function (key: string) {
+    const lang = hass?.locale.language ?? DEFAULT_LANG;
 
-  if (search !== '' && replace !== '') {
-    tranlated = tranlated.replace(search, replace);
-  }
-  return tranlated;
+    let translated = getTranslatedString(key, lang);
+    if (!translated) translated = getTranslatedString(key, DEFAULT_LANG);
+    return translated ?? key;
+  };
 }

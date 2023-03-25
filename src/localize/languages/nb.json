@@ -1,14 +1,45 @@
 {
   "common": {
-    "version": "Version",
-    "invalid_configuration": "Invalid configuration",
-    "show_warning": "Show Warning",
+    "version": "Versjon",
+    "invalid_configuration": "Ugyldig oppsett",
+    "show_warning": "Vis advarsel",
     "at": "klokken",
     "to": "Til",
-    "arrives": "Avgang",
+    "arrives": "Ankomst",
     "arrived": "Gikk for",
-    "coming": "Avgang",
-    "delayed": "Forsinket",
-    "entity_error": "Kunne ikke finne entiteten."
+    "departs": "Avgang",
+    "delayed": "Forsinket"
+  },
+  "editor": {
+    "name": "Navn",
+    "title": "Rediger rute",
+    "destination": "Destinasjon",
+    "display_time": "Vis tid",
+    "divide_routes": "Separer ruter",
+    "divide_lines": "Separer linjer",
+    "clock_icon_state": {
+      "title": "Klokkesymbol",
+      "left": "Venstrestilt",
+      "right": "Høyrestilt"
+    },
+    "extra_departures": {
+      "title": "Ekstraavganger",
+      "next": "inkluder neste",
+      "all": "inkluder alle"
+    },
+    "human_readable_time": {
+      "title": "Vis tid som setning",
+      "all": "for alle avganger",
+      "line": "kun for hovedavgang",
+      "line_next": "kun for neste avgang",
+      "line_extras": "kun for ekstraavganger"
+    },
+    "remaining_time": {
+      "title": "Vis gjenværende tid",
+      "all": "for alle avganger",
+      "line": "kun for hovedavgang",
+      "line_next": "kun for neste avgang",
+      "line_extras": "kun for ekstraavganger"
+    }
   }
 }

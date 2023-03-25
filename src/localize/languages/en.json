@@ -7,8 +7,39 @@
     "to": "To",
     "arrives": "Arrives",
     "arrived": "Left about",
-    "coming": "Leaves",
-    "delayed": "Delayed",
-    "entity_error": "Entity could not be found."
+    "departs": "Departs",
+    "delayed": "Delayed"
+  },
+  "editor": {
+    "name": "Name",
+    "title": "Edit route",
+    "destination": "Destination",
+    "display_time": "Display time",
+    "divide_routes": "Divide routes",
+    "divide_lines": "Divide lines",
+    "clock_icon_state": {
+      "title": "Clock icon",
+      "left": "Left aligned",
+      "right": "Right aligned"
+    },
+    "extra_departures": {
+      "title": "Extra departures",
+      "next": "Include next",
+      "all": "Include all"
+    },
+    "human_readable_time": {
+      "title": "Display time as sentence",
+      "all": "for all departures",
+      "line": "only for main departure",
+      "line_next": "only for next departure",
+      "line_extras": "only for extra departures"
+    },
+    "remaining_time": {
+      "title": "Display remaning time",
+      "all": "for all departures",
+      "line": "for main departure",
+      "line_next": "only for next departure",
+      "line_extras": "only for extra departures"
+    }
   }
 }

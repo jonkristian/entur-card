@@ -1,9 +1,0 @@
-{
-  "domain": "entur-card",
-  "name": "Entur Card",
-  "documentation": "https://github.com/jonkristian/entur-card",
-  "dependencies": [],
-  "codeowners": ["@jonkristian"],
-  "requirements": [],
-  "version": "1.0.0"
-}
