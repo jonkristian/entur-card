@@ -1,6 +1,6 @@
 {
   "name": "entur-card",
-  "version": "2.0.0-beta.3",
+  "version": "2.0.0",
   "description": "This card is made to work with the Entur public transport component.",
   "keywords": [
     "home-assistant",
