@@ -1,0 +1,45 @@
+{
+  "common": {
+    "version": "Versjon",
+    "invalid_configuration": "Ugyldig oppsett",
+    "show_warning": "Vis åtvaring",
+    "at": "klokka",
+    "to": "Til",
+    "arrives": "Kjem",
+    "arrived": "Gjekk for",
+    "departs": "Avgang",
+    "delayed": "Forsinka"
+  },
+  "editor": {
+    "name": "Namn",
+    "title": "Rediger rute",
+    "destination": "Destinasjon",
+    "display_time": "Vis tid",
+    "divide_routes": "Separer ruter",
+    "divide_lines": "Separer linjer",
+    "clock_icon_state": {
+      "title": "Klokkesymbol",
+      "left": "Venstrestilt",
+      "right": "Høgrestilt"
+    },
+    "extra_departures": {
+      "title": "Ekstraavgangar",
+      "next": "inkluder neste",
+      "all": "inkluder alle"
+    },
+    "human_readable_time": {
+      "title": "Vis tid som setning",
+      "all": "for alle avgangar",
+      "line": "kun for hovudavgang",
+      "line_next": "kun for neste avgang",
+      "line_extras": "kun for ekstraavgangar"
+    },
+    "remaining_time": {
+      "title": "Vis tida som er igjen",
+      "all": "for alle avgangar",
+      "line": "kun for hovudavgang",
+      "line_next": "kun for neste avgang",
+      "line_extras": "kun for ekstraavgangar"
+    }
+  }
+}
