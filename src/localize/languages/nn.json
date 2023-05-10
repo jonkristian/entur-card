@@ -30,16 +30,16 @@
     "human_readable_time": {
       "title": "Vis tid som setning",
       "all": "for alle avgangar",
-      "line": "kun for hovudavgang",
-      "line_next": "kun for neste avgang",
-      "line_extras": "kun for ekstraavgangar"
+      "line": "berre for hovudavgang",
+      "line_next": "berre for neste avgang",
+      "line_extras": "berre for ekstraavgangar"
     },
     "remaining_time": {
       "title": "Vis tida som er igjen",
       "all": "for alle avgangar",
-      "line": "kun for hovudavgang",
-      "line_next": "kun for neste avgang",
-      "line_extras": "kun for ekstraavgangar"
+      "line": "berre for hovudavgang",
+      "line_next": "berre for neste avgang",
+      "line_extras": "berre for ekstraavgangar"
     }
   }
 }
