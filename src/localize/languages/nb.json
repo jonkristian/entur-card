@@ -5,10 +5,16 @@
     "show_warning": "Vis advarsel",
     "at": "klokken",
     "to": "Til",
-    "arrives": "Ankomst",
+    "arrives": "Kommer om",
     "arrived": "Gikk for",
-    "departs": "Avgang",
-    "delayed": "Forsinket"
+    "departs": "Avgang om",
+    "departing": "Avgang nå",
+    "delayed": "Forsinket",
+    "and": "og",
+    "minute": "minutt",
+    "minutes": "minutter",
+    "hour": "time",
+    "hours": "timer"
   },
   "editor": {
     "name": "Navn",

@@ -5,10 +5,16 @@
     "show_warning": "Vis åtvaring",
     "at": "klokka",
     "to": "Til",
-    "arrives": "Kjem",
+    "arrives": "Kjem om",
     "arrived": "Gjekk for",
-    "departs": "Avgang",
-    "delayed": "Forseinka"
+    "departs": "Avgang om",
+    "departing": "Avgang nå",
+    "delayed": "Forseinka",
+    "and": "og",
+    "minute": "minutt",
+    "minutes": "minutter",
+    "hour": "time",
+    "hours": "timer"
   },
   "editor": {
     "name": "Namn",

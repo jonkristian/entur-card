@@ -1,6 +1,6 @@
 import { LitElement, html, TemplateResult, CSSResultGroup } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import setupCustomlocalize from "../localize/localize";
+import "./human-readable"
 import { cardStyle } from "../styles/card";
 import dayjs from "dayjs";
 import "dayjs/locale/nb";
@@ -31,16 +31,25 @@ export class EnturCardLineExtra extends LitElement {
     let departure = this.departure;
     this.formattedDeparture = String(departure).match("^(.*:..)(.*)");
 
+    const human_readable =
+      this.human_readable_time === 'line_extras' ||
+      this.human_readable_time === 'all'
+      ? true
+      : false;
+
     return html`
       <div class="entur-line ${this.divide_lines ? "divided" : ""}">
         <div class="entur-line__header">
-          ${this.formattedDeparture[2]} ${this._renderHumanReadable()}
+          ${this.formattedDeparture[2]}
+          ${human_readable ? html`
+            <entur-card-human-readable
+              .hass=${this.hass}
+              .due=${this.formattedDeparture[1]}
+            ></entur-card-human-readable>
+          `:html``}
         </div>
 
-        <div
-          class="entur-line__due entur-column icon-${this.clock_icon_state ??
-          "hidden"}"
-        >
+        <div class="entur-line__due entur-column icon-${this.clock_icon_state ?? "hidden"}">
           <ha-icon class="entur-line__icon" icon="mdi:clock"></ha-icon>
           ${this._renderTimeLeft()}
         </div>
@@ -59,24 +68,5 @@ export class EnturCardLineExtra extends LitElement {
     }
 
     return html`${this.formattedDeparture[1]}`;
-  }
-
-  private _renderHumanReadable(): any {
-    if (!this.human_readable_time) {
-      return html``;
-    }
-    const due = dayjs(this.formattedDeparture[1], "H:mm");
-    const customLocalize = setupCustomlocalize(this.hass!);
-
-    if (
-      this.human_readable_time == "extras" ||
-      this.human_readable_time == "all"
-    ) {
-      return html`
-        <p class="entur-line__hr">
-          ${customLocalize("common.arrives")} ${due.fromNow()}
-        </p>
-      `;
-    }
   }
 }

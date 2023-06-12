@@ -5,10 +5,16 @@
     "show_warning": "Show warning",
     "at": "At",
     "to": "To",
-    "arrives": "Arrives",
+    "arrives": "Arrives in",
     "arrived": "Left about",
-    "departs": "Departs",
-    "delayed": "Delayed"
+    "departs": "Departs in",
+    "departing": "Departing",
+    "delayed": "Delayed for",
+    "and": "and",
+    "minute": "minute",
+    "minutes": "minutes",
+    "hour": "hour",
+    "hours": "hours"
   },
   "editor": {
     "name": "Name",
